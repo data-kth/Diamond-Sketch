@@ -5,7 +5,7 @@ Sketch is a probabilistic data structure used to record frequencies of items in 
 
 The source code contains the C++ implementation of the CM, CU, C, A sketch and PCM, PCU, PC, PA sketch (using our Pyramid sketch framework). We complete these codes on OS X 10.11.6 and compile successfully using g++ 4.8.4. 
 
-The file ip_trace.dat is the subset of one of the encrypted IP traces used in experiments.
+The file `ip_trace.dat` is the subset of one of the encrypted IP traces used in experiments.
 
 ## How to run
 
