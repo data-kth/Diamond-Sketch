@@ -2,11 +2,11 @@
 #define _CMSketch_16bit_H
 
 #include "../includes.h"
-#include "BOBHash.h"
+#include "Hash.h"
 
 class CM_Sketch_16bit {	
 private:
-	BOBHash bobhash[MAX_HASH_NUM];
+	Hash hash[MAX_HASH_NUM];
 	unsigned short * counter[MAX_HASH_NUM];
 	const int w, d;
 
@@ -27,13 +27,13 @@ public:
 		}
 
 		for (int i = 0; i < d; i++) {
-			bobhash[i] = BOBHash(i+1000);
+			hash[i] = Hash(i+1000);
 		}
 	}
 
 	void Insert(const char * str) {
 		for (int i = 0; i < d; ++i) {
-			int index = (bobhash[i].run(str, strlen(str))) % w;
+			int index = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			if (counter[i][index] != (unsigned short)~0) 
 				++counter[i][index];
 		}
@@ -41,7 +41,7 @@ public:
 
 	void Insert(const char * str, unsigned short times) {
 		for (int i = 0; i < d; ++i) {
-			int index = (bobhash[i].run(str, strlen(str))) % w;
+			int index = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			LS++;
 			unsigned int after = (unsigned int)counter[i][index] + (unsigned int)times;
 			if (after > 0xffff)
@@ -54,7 +54,8 @@ public:
 	unsigned short Query(const char *str) {
 		unsigned short min_value = ~0;
 		for (int i = 0; i < d; i++) {
-			int index = (bobhash[i].run(str, strlen(str))) % w;
+			int index = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
+		//	printf("? %d\n", index);
 			LS++;
 			min_value = min(min_value, counter[i][index]);
 		}
@@ -63,7 +64,7 @@ public:
 
 	void Delete(const char * str) {
 		for (int i = 0; i < d; ++i) {
-			int index = (bobhash[i].run(str, strlen(str))) % w;
+			int index = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			LS++;
 			--counter[i][index];
 		}

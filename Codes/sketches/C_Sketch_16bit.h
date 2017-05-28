@@ -2,13 +2,13 @@
 #define _CSketch_16bit_H
 
 #include "../includes.h"
-#include "BOBHash.h"
+#include "Hash.h"
 
 class C_Sketch_16bit {
 private:
 	const int w, d;
 	short res[MAX_HASH_NUM];
-	BOBHash bobhash[MAX_HASH_NUM<<1];
+	Hash hash[MAX_HASH_NUM<<1];
 	short * counter[MAX_HASH_NUM];
 
 public:
@@ -25,14 +25,21 @@ public:
 			counter[i] = new short [w];
 			memset(counter[i], 0, sizeof(short) * w);
 		}
+
+		/*
 		for (int i = 0; i < d*2; ++i) {
 			bobhash[i] = BOBHash(i+1000);
+		}
+		*/
+
+		for (int i = 0; i < d * 2; i ++) {
+			hash[i] = Hash(i + 1000);
 		}
 	}
 	void Insert(const char * str) {
 		for (int i = 0; i < d; ++i) {
-			int index = bobhash[i].run(str, strlen(str)) % w;
-			bool neg = (bobhash[i+d].run(str, strlen(str)) % 2) == 0;
+			int index = hash[i].run(str, strlen(str), HASH_TYPE) % w;
+			bool neg = (hash[i+d].run(str, strlen(str), HASH_TYPE) % 2) == 0;
 			if (neg) {
 				if (counter[i][index] != (short)0x8000) {
 					--counter[i][index];
@@ -46,8 +53,8 @@ public:
 	}
 	int Query(const char * str) {
 		for (int i = 0; i < d; ++i) {
-			int index = bobhash[i].run(str, strlen(str)) % w;
-			bool neg = (bobhash[i+d].run(str, strlen(str)) % 2) == 0;
+			int index = hash[i].run(str, strlen(str), HASH_TYPE) % w;
+			bool neg = (hash[i+d].run(str, strlen(str), HASH_TYPE) % 2) == 0;
 			res[i] = (neg ? -counter[i][index] : counter[i][index]);
 		}
 		sort(res, res + d);

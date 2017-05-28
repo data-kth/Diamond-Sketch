@@ -57,6 +57,7 @@ typedef std::chrono::duration<float, std::milli> mil;
 int LS = 0;
 
 int MEM_SIZE = 0;
+int HASH_TYPE = 1;
 
 // file pathes
 string dataset_path(int dataset_id) {

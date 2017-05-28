@@ -2,11 +2,11 @@
 #define _CUSketch_16BIT_H
 
 #include "../includes.h"
-#include "BOBHash.h"
+#include "Hash.h"
 
 class CU_Sketch_16bit {	
 private:
-	BOBHash bobhash[MAX_HASH_NUM];
+	Hash hash[MAX_HASH_NUM];
 	int index[MAX_HASH_NUM];
 	unsigned short * counter[MAX_HASH_NUM];
 	const int w, d;
@@ -28,14 +28,14 @@ public:
 		}
 
 		for (int i = 0; i < d; i++) {
-			bobhash[i] = BOBHash(i + 1000);
+			hash[i] = Hash(i + 1000);
 		}
 	}
 
 	void Insert (const char * str) {
 		unsigned short min_value = ~0;
 		for (int i = 0; i < d; i++) {
-			index[i] = (bobhash[i].run(str, strlen(str))) % w;
+			index[i] = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			min_value = min(min_value, counter[i][index[i]]);
 		}
 		if (min_value != (unsigned short)~0)
@@ -47,7 +47,7 @@ public:
 	unsigned short Query (const char *str) {
 		unsigned short min_value = ~0;
 		for (int i = 0; i < d; i++) {
-			index[i] = (bobhash[i].run(str, strlen(str))) % w;
+			index[i] = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			min_value = min(min_value, counter[i][index[i]]);
 		}
 		return (min_value == (unsigned short)~0) ? 0 : min_value;

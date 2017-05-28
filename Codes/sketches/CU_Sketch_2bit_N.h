@@ -2,11 +2,11 @@
 #define _CUSketch_2BIT_N_H
 
 #include "../includes.h"
-#include "BOBHash.h"
+#include "Hash.h"
 
 class CU_Sketch_2bit_N {	
 private:
-	BOBHash bobhash[MAX_HASH_NUM];
+	Hash hash[MAX_HASH_NUM];
 	int index[MAX_HASH_NUM];
 	unsigned char * counter[MAX_HASH_NUM];
 	const int w, d;
@@ -27,7 +27,7 @@ public:
 		}
 
 		for (int i = 0; i < d; i++) {
-			bobhash[i] = BOBHash(i + 1000);
+			hash[i] = Hash(i + 1000);
 		}
 	}
 	/*
@@ -46,7 +46,7 @@ public:
 	void Insert (const char * str, int to_num) {
 		//if (to_num >= 2) cout << "to_num=" << to_num << endl;
 		for (int i = 0; i < d; i++) {
-			int index = (bobhash[i].run(str, strlen(str))) % w;
+			int index = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			LS++;
 			counter[i][index] = max(counter[i][index], (unsigned char)to_num);
 		}
@@ -55,7 +55,7 @@ public:
 	unsigned char Query (const char *str) {
 		unsigned char min_value = 3;
 		for (int i = 0; i < d; i++) {
-			index[i] = (bobhash[i].run(str, strlen(str))) % w;
+			index[i] = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			LS++;
 			min_value = min(min_value, counter[i][index[i]]);
 		}

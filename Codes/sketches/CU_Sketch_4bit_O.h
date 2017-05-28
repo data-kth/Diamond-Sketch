@@ -2,11 +2,11 @@
 #define _CUSketch_4BIT_O_H
 
 #include "../includes.h"
-#include "BOBHash.h"
+#include "Hash.h"
 
 class CU_Sketch_4bit_O {	
 private:
-	BOBHash bobhash[MAX_HASH_NUM];
+	Hash hash[MAX_HASH_NUM];
 	int index[MAX_HASH_NUM];
 	unsigned char * counter[MAX_HASH_NUM];
 	const int w, d;
@@ -27,14 +27,14 @@ public:
 		}
 
 		for (int i = 0; i < d; i++) {
-			bobhash[i] = BOBHash(i + start_prime_num);
+			hash[i] = Hash(i + start_prime_num);
 		}
 	}
 
 	bool Insert (const char * str) {
 		unsigned char min_value = 15;
 		for (int i = 0; i < d; i++) {
-			index[i] = (bobhash[i].run(str, strlen(str))) % w;
+			index[i] = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			LS++;
 			min_value = min(min_value, counter[i][index[i]]);
 		}
@@ -52,7 +52,7 @@ public:
 	unsigned char Query (const char *str) {
 		unsigned char min_value = 15;
 		for (int i = 0; i < d; i++) {
-			index[i] = (bobhash[i].run(str, strlen(str))) % w;
+			index[i] = (hash[i].run(str, strlen(str), HASH_TYPE)) % w;
 			LS++;
 			min_value = min(min_value, counter[i][index[i]]);
 		}

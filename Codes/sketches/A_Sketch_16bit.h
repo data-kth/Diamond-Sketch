@@ -2,7 +2,7 @@
 #define _ASketch_16bit_H
 
 #include "../includes.h"
-#include "BOBHash.h"
+#include "Hash.h"
 #include "CM_Sketch_16bit.h"
 
 class A_Sketch_16bit {	
