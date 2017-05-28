@@ -7,6 +7,8 @@ The source code contains the C++ implementation of the CM, CU, C, A sketch and P
 
 The file `ip_trace.dat` is the subset of one of the encrypted IP traces used in experiments.
 
+New hash functions could be added to `Hash.h`.
+
 ## How to run
 
 Suppose you've already cloned the respository and start from the `Codes` directory.
